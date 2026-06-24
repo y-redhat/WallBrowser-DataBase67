@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="SkKKfGHOuvo_FlOqviX8AMuMWP9FvLv2qvrCCM2Ie8U" />
+    <meta name="description" content="wallBrowser - 検閲回避ブラウザ with プロキシ自動追加 & クッキー保存">
+    <meta name="keywords" content="ahmia, proxy, 検閲回避, ヘッダー偽造, プロキシチェーン">
+    <meta name="author" content="Nova Notions(Nn)team">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Japanese">
+    <meta name="geo.region" content="JP">
+    <meta name="copyright" content="Copyright 2026 Nova Notions(Nn)team">
+    <link rel="canonical" href="https://kdp-fst-wall.wuaze.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kdp-fst-wall.wuaze.com/">
+    <meta property="og:title" content="wallBrowser Ahmia Style - プロキシ自動追加 & クッキー保存">
+    <meta property="og:description" content="背景画像、プロキシON/OFFボタン、自動追加機能、クッキー保存対応">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kdp-fst-wall.wuaze.com/">
+    <meta property="twitter:title" content="wallBrowser">
+    <meta property="twitter:description" content="検閲回避ブラウザ">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>wallBrowser · Ahmia Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+            background-color: #0a0a0a;
+            color: #ddd;
+            font-family: 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(3px);
+            z-index: 1000;
+            padding: 15vh 10% 0 10%;
+        }
+
+        .portal-logo {
+            text-align: left;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .logo-text {
+            font-size: 3rem;
+            font-weight: 400;
+            letter-spacing: 0;
+            margin-bottom: 0.2rem;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(0,150,255,0.7);
+        }
+
+        .logo-tagline {
+            color: #88ccff;
+            font-size: 0.9rem;
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .main-search {
+            width: 100%;
+            max-width: 700px;
+            margin: 0;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            background: rgba(20,20,30,0.9);
+            border: 1px solid #2a6f9c;
+            border-radius: 40px;
+            color: #fff;
+            outline: none;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0,160,255,0.3);
+            transition: all 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: #4aa3ff;
+            box-shadow: 0 0 20px #4aa3ff;
+        }
+
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .search-button {
+            background: #1a5f8a;
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background 0.2s;
+            box-shadow: 0 0 10px #1a5f8a;
+        }
+
+        .search-button:hover {
+            background: #2a7ab0;
+        }
+
+        .proxy-toggle {
+            background: #333;
+            border: 1px solid #555;
+            color: #ccc;
+            padding: 12px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .proxy-toggle.active {
+            background: #1f4a6b;
+            border-color: #4aa3ff;
+            color: white;
+            box-shadow: 0 0 12px #1f8de0;
+        }
+
+        .proxy-toggle .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #777;
+            display: inline-block;
+        }
+
+        .proxy-toggle.active .indicator {
+            background: #4aff7a;
+            box-shadow: 0 0 10px #4aff7a;
+        }
+
+        .auto-proxy-btn {
+            background: #2d2d42;
+            border: 1px solid #5f5f8a;
+            color: #b0b0ff;
+            padding: 12px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .quick-link {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #2a4e6e;
+            color: #cce5ff;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            transition: all 0.2s;
+        }
+
+        .quick-link:hover {
+            background: rgba(20,80,120,0.5);
+            border-color: #4aa3ff;
+            transform: translateY(-2px);
+        }
+
+        .footer-links {
+            margin-top: 40px;
+            color: #aaa;
+            font-size: 0.8rem;
+        }
+
+        .footer-links button {
+            background: none;
+            border: none;
+            color: #8abfff;
+            cursor: pointer;
+            margin: 0 10px;
+            text-decoration: underline dotted;
+        }
+
+        .proxy-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            z-index: 1002;
+            border: 1px solid #2a6f9c;
+            backdrop-filter: blur(8px);
+            color: #ccc;
+        }
+
+        .proxy-indicator .status {
+            color: #8ae2ff;
+            font-weight: bold;
+        }
+
+        #browserScreen {
+            width: 100%;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1001;
+            background: #0a0a0a;
+        }
+        .browser-header {
+            background: #11131f;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #2a4e6e;
+        }
+        .browser-logo {
+            color: #8ae2ff;
+            font-weight: 600;
+            font-size: 1.2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .browser-search {
+            flex: 1;
+            background: #1e1e2e;
+            border: 1px solid #2a4e6e;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 30px;
+            outline: none;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .nav-btn {
+            background: #1e1e2e;
+            border: 1px solid #2a4e6e;
+            color: #ccc;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .browser-content { flex: 1; display: flex; }
+        .browser-frame { flex: 1; border: none; background: white; }
+        .tab-bar {
+            background: #11131f;
+            padding: 8px 20px;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid #2a4e6e;
+        }
+        .tab {
+            background: #1e1e2e;
+            border: 1px solid #2a4e6e;
+            color: #ccc;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        .tab.active {
+            background: #1a5f8a;
+            color: white;
+            border-color: #4aa3ff;
+        }
+
+        .proxy-control-panel {
+            position: fixed;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 90%; max-width: 700px;
+            background: #0c0c14;
+            border: 1px solid #2a6f9c;
+            border-radius: 16px;
+            z-index: 2001;
+            display: none;
+            box-shadow: 0 0 50px #004477;
+            backdrop-filter: blur(15px);
+            padding: 20px;
+            color: #ddd;
+        }
+        .proxy-panel-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #2a4e6e; padding-bottom: 10px;
+        }
+        .proxy-panel-close {
+            background: #a22; color: white; border: none;
+            width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+        }
+        .proxy-section { margin: 20px 0; }
+        .proxy-list { max-height: 200px; overflow-y: auto; }
+        .control-btn {
+            padding: 8px 16px; border: none; border-radius: 20px;
+            background: #1e1e2e; color: #ccc; cursor: pointer; margin-right: 8px;
+        }
+        .loading-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.8); z-index:2002; display: none;
+            justify-content: center; align-items: center; flex-direction: column;
+        }
+        .loader { border: 5px solid #333; border-top:5px solid #4aa3ff; border-radius:50%; width:50px; height:50px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0%{ transform: rotate(0); } 100%{ transform: rotate(360deg); } }
+        .status-bar {
+            position: fixed; bottom:0; left:0; width:100%;
+            background: #11131f; padding: 5px 10px; font-size:0.8rem;
+            border-top:1px solid #2a4e6e; display: flex; justify-content: space-between;
+            z-index:1003; color:#aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="proxy-indicator" id="proxyIndicator">
+        <span>Proxy:</span> <span class="status" id="proxyStatus">OFF</span> | <span id="proxyCount">0</span> active
+    </div>
+
+    <div id="startScreen">
+        <div class="portal-logo">
+            <div class="logo-text">wallBrowser</div>
+            <div class="logo-tagline">直列プロキシ · 検閲回避</div>
+        </div>
+
+        <div class="main-search">
+            <input type="text" class="search-box" id="mainSearch" 
+                   placeholder="Search or enter address..." autocomplete="off" autofocus>
+
+            <div class="action-row">
+                <button class="search-button" id="mainSearchButton">Go</button>
+                <button class="proxy-toggle" id="proxyToggleBtn">
+                    <span class="indicator"></span> Proxy
+                </button>
+                <button class="auto-proxy-btn" id="autoProxyBtn">⟲ Auto Proxy</button>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <div class="quick-link" data-url="https://duckduckgo.com">DuckDuckGo</div>
+            <div class="quick-link" data-url="https://www.reddit.com">Reddit</div>
+            <div class="quick-link" data-url="https://archive.org">Archive</div>
+            <div class="quick-link" data-url="https://github.com">GitHub</div>
+            <div class="quick-link" data-url="https://www.youtube.com">YouTube</div>
+            <div class="quick-link" data-url="https://twitter.com">Twitter</div>
+            <div class="quick-link" data-url="https://web.cloudmoonapp.com/ja/game/com.roblox.client/">cloudmoon</div>
+            <div class="quick-link" data-url="https://startpage.com">StartPage</div>
+        </div>
+
+        <div class="footer-links">
+            <button onclick="openProxyPanel()">Proxy Settings</button>
+            <button onclick="showTerminal()">Terminal</button>
+            <button onclick="window.location.href='proxy-test.html'">Tester</button>
+            <button onclick="window.location.href='howwork.html'">How it works</button>
+        </div>
+    </div>
+    
+    <div id="browserScreen">
+        <div class="browser-header">
+            <button class="browser-logo" onclick="goHome()">WALL</button>
+            <input type="text" class="browser-search" id="browserSearch" 
+                   placeholder="Search or enter URL..." onkeypress="handleBrowserSearchKeyPress(event)">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="browserBack()">←</button>
+                <button class="nav-btn" onclick="browserForward()">→</button>
+                <button class="nav-btn" onclick="browserRefresh()">↻</button>
+                <button class="nav-btn" onclick="goHome()">⌂</button>
+                <button class="nav-btn" onclick="openProxyPanel()">P</button>
+            </div>
+        </div>
+        <div class="browser-content">
+            <iframe class="browser-frame" id="browserFrame" 
+                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+                    allow="fullscreen" allowfullscreen></iframe>
+        </div>
+        <div class="tab-bar">
+            <button class="tab active" onclick="switchTab('main')">Main</button>
+            <button class="tab" onclick="switchTab('social')">Social</button>
+            <button class="tab" onclick="switchTab('tools')">Tools</button>
+        </div>
+    </div>
+
+    <div class="proxy-control-panel" id="proxyControlPanel">
+        <div class="proxy-panel-header">
+            <span style="color:#8ae2ff;">Proxy Configuration</span>
+            <button class="proxy-panel-close" onclick="closeProxyPanel()">×</button>
+        </div>
+        <div class="proxy-section">
+            <h4>Proxy Chain</h4>
+            <div class="proxy-list" id="proxyChainList"></div>
+            <div style="margin-top:10px;">
+                <button class="control-btn" onclick="addTestProxy()">➕ Add Test Proxy</button>
+                <button class="control-btn" onclick="saveProxySettings()">💾 Save to Cookie</button>
+            </div>
+        </div>
+        <p style="color:#aaa; font-size:0.8rem;">Settings auto-saved to cookies (30 days)</p>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+        <div id="loadingText">Loading...</div>
+    </div>
+
+    <div class="status-bar">
+        <span id="connectionStatus">Connected</span>
+        <span id="proxyCountFooter">Proxy: 0</span>
+        <span id="pageStatus">Ready</span>
+    </div>
+
+    <script>
+        const $C={};
+        $C.set=function(n,v,d){let e=new Date;e.setTime(e.getTime()+(d||30)*24*60*60*1000);document.cookie=n+'='+encodeURIComponent(v)+'; expires='+e.toUTCString()+'; path=/'};
+        $C.get=function(n){let c=document.cookie.split('; ').find(r=>r.startsWith(n+'='));return c?decodeURIComponent(c.split('=')[1]):null};
+
+        let pS={
+            e: true,
+            c: [
+                {id:1,n:"CORS",u:"https://corsproxy.io/?",t:"cors",a:true,p:1,r:true,ret:false,s:0},
+                {id:2,n:"AllOrigins",u:"https://api.allorigins.win/get?url=",t:"json",a:true,p:2,r:false,ret:true,f:"contents",s:0},
+                {id:3,n:"WhateverOrigin",u:"https://whateverorigin.org/get?url=",t:"json",a:true,p:3,r:false,ret:true,f:"contents",s:0}
+            ],
+            hS:{e:true,h:{'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36','Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8','Accept-Language':'en-US,en;q=0.9'}},
+            tO:15000, maxR:3
+        };
+
+        let D={
+            ss:document.getElementById('startScreen'),
+            bs:document.getElementById('browserScreen'),
+            ms:document.getElementById('mainSearch'),
+            mb:document.getElementById('mainSearchButton'),
+            brs:document.getElementById('browserSearch'),
+            bf:document.getElementById('browserFrame'),
+            pi:document.getElementById('proxyIndicator'),
+            ps:document.getElementById('proxyStatus'),
+            pc:document.getElementById('proxyCount'),
+            pcl:document.getElementById('proxyChainList'),
+            ld:document.getElementById('loadingOverlay'),
+            ptb:document.getElementById('proxyToggleBtn'),
+            apb:document.getElementById('autoProxyBtn')
+        };
+
+        function _l(s){ D.ld.style.display='flex'; document.getElementById('loadingText').innerText=s; }
+        function _h(){ D.ld.style.display='none'; }
+        function _upPStat(){
+            let a=pS.c.filter(x=>x.a).length, t=pS.c.length;
+            D.ps.innerText=pS.e?'ON':'OFF';
+            D.pc.innerText=a+'/'+t;
+            document.getElementById('proxyCountFooter').innerText='Proxy: '+a;
+            D.ptb.className='proxy-toggle'+(pS.e?' active':'');
+        }
+        function _upPList(){
+            D.pcl.innerHTML='';
+            pS.c.forEach((x,i)=>{
+                let d=document.createElement('div');
+                d.className='proxy-item'+(x.a?' active':'');
+                d.innerHTML=`<b>${x.n}</b> <small>${x.s?x.s+'ms':'未テスト'}</small>`;
+                d.onclick=()=>{ x.a=!x.a; _upPList(); save(); };
+                D.pcl.appendChild(d);
+            });
+        }
+        function save(){
+            let s=JSON.stringify({e:pS.e, c:pS.c.map(p=>({id:p.id,n:p.n,u:p.u,a:p.a,s:p.s})) });
+            $C.set('wbProxy',s,30);
+        }
+        function load(){
+            let s=$C.get('wbProxy');
+            if(s){
+                try{ let o=JSON.parse(s); pS.e=o.e; 
+                    o.c.forEach(c=>{ let ex=pS.c.find(p=>p.id===c.id); if(ex){ex.a=c.a; ex.s=c.s;} });
+                }catch(e){}
+            }
+            _upPStat(); _upPList();
+        }
+
+        D.ptb.onclick=()=>{ pS.e=!pS.e; _upPStat(); save(); };
+        D.apb.onclick=()=>{
+            let newId=Date.now();
+            pS.c.push({id:newId, n:'Auto-'+Math.floor(Math.random()*100), u:'https://cors-anywhere.herokuapp.com/?', t:'cors', a:true, p:99, r:true, ret:false, s:0});
+            _upPList(); save(); alert('Proxy added (demo).');
+        };
+
+        window.addTestProxy=function(){
+            pS.c.push({id:Date.now(), n:'TestProxy', u:'https://api.allorigins.win/get?url=', t:'json', a:true, p:5, r:false, ret:true, f:'contents',s:0});
+            _upPList(); save();
+        };
+
+        function isValid(u){ if(!u)return 0; if(u.includes(' '))return 0; try{ new URL(u.startsWith('http')?u:'https://'+u); return 1; }catch{ return 0; } }
+        function startBrowse(){
+            let inp=D.ms.value.trim();
+            if(!inp){ loadUrl('https://duckduckgo.com'); openBrowser(); return; }
+            if(isValid(inp)){ let url=inp.startsWith('http')?inp:'https://'+inp; loadUrl(url); openBrowser(); }
+            else { loadUrl('https://duckduckgo.com/?q='+encodeURIComponent(inp)); openBrowser(); }
+        }
+        async function loadUrl(url){
+            _l('Loading...'); D.brs.value=url;
+            if(!pS.e){ D.bf.src=url; _h(); return; }
+            let ap=pS.c.find(x=>x.a);
+            if(!ap){ D.bf.src=url; _h(); return; }
+            try{
+                let pu=ap.u+encodeURIComponent(url);
+                let r=await fetch(pu,{signal:AbortSignal.timeout(8000)});
+                if(!r.ok) throw new Error('HTTP'+r.status);
+                let txt=await r.text();
+                let doc=D.bf.contentDocument||D.bf.contentWindow.document;
+                doc.open(); doc.write(txt); doc.close();
+                D.bf.dataset.originalUrl=url;
+            }catch(e){ D.bf.src=url; }
+            _h();
+        }
+        function openBrowser(){ D.ss.style.display='none'; D.bs.style.display='flex'; D.brs.focus(); }
+        function closeBrowser(){ D.bs.style.display='none'; D.ss.style.display='flex'; D.ms.focus(); }
+        function goHome(){ loadUrl('https://duckduckgo.com'); }
+        function browserRefresh(){ loadUrl(D.bf.dataset.originalUrl||'https://duckduckgo.com'); }
+        function browserBack(){ try{ D.bf.contentWindow.history.back(); }catch(e){} }
+        function browserForward(){ try{ D.bf.contentWindow.history.forward(); }catch(e){} }
+        window.handleBrowserSearchKeyPress=function(e){ if(e.key==='Enter') navigateFromBrowser(); };
+        function navigateFromBrowser(){ let inp=D.brs.value.trim(); if(isValid(inp)) loadUrl(inp.startsWith('http')?inp:'https://'+inp); else loadUrl('https://duckduckgo.com/?q='+encodeURIComponent(inp)); }
+        function quickAccess(url){ D.ms.value=url; loadUrl(url); openBrowser(); }
+        document.querySelectorAll('.quick-link').forEach(el=>{ el.addEventListener('click',()=>quickAccess(el.dataset.url)); });
+
+        window.switchTab=function(t){ let m={'main':'https://duckduckgo.com','social':'https://twitter.com','tools':'https://github.com'}; loadUrl(m[t]||m.main); };
+
+        window.openProxyPanel=function(){ document.getElementById('proxyControlPanel').style.display='block'; _upPList(); };
+        window.closeProxyPanel=function(){ document.getElementById('proxyControlPanel').style.display='none'; };
+
+        window.showTerminal=function(){ alert('Terminal placeholder - type in console'); };
+
+        D.mb.onclick=startBrowse;
+        D.ms.addEventListener('keypress',(e)=>{if(e.key==='Enter')startBrowse();});
+        D.brs.addEventListener('keypress',(e)=>{if(e.key==='Enter')navigateFromBrowser();});
+        load();
+
+        window.addEventListener('online',()=>document.getElementById('connectionStatus').innerText='Online');
+        window.addEventListener('offline',()=>document.getElementById('connectionStatus').innerText='Offline');
+    </script>
+</body>
+</html>

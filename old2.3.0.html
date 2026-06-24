@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="SkKKfGHOuvo_FlOqviX8AMuMWP9FvLv2qvrCCM2Ie8U" />
+    <meta name="description" content="wallBrowserは無料で使える検閲回避ブラウザ。同一生成元ポリシーの厳守でユーザーの安全を守る。学校や職場の制限を回避し、Discord、YouTube、Reddit、Xなどのサイトにアクセス可能。プロキシ、サーバレスのクライアントサイドのブロック回避として開発。そして、ユーザーの情報は一切収集しないプライバシー保護を実現。最上級のセキュリティを無料で提供。">
+    <meta name="keywords" content="wallBrowser,検閲回避,学校制限回避,ブラウザ,ブロック解除,wall,VR 2.1.0,School Darks Project">
+    <meta name="author" content="Nova Notions(Nn)team">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Japanese">
+    <meta name="geo.region" content="JP">
+    <meta name="copyright" content="Copyright 2026 Nova Notions(Nn)team">
+    <link rel="canonical" href="https://kdp-fst-wall.wuaze.com/">
+
+    <!-- Open Graph (Facebook) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kdp-fst-wall.wuaze.com/">
+    <meta property="og:title" content="wallBrowser - 無料検閲回避ブラウザ VR 2.1.0">
+    <meta property="og:description" content="学校や職場の制限や検閲を回避する無料ブラウザ。同一生成元ポリシーの厳守でユーザーの安全を守る。サーバーとプロキシレスでユーザーのプライバシーを保護。履歴も収集なし。Discord、YouTube、RedditやXなどにアクセス可能。">
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kdp-fst-wall.wuaze.com/">
+    <meta property="twitter:title" content="wallBrowser - 無料検閲回避ブラウザ">
+    <meta property="twitter:description" content="高度な検閲回避技術を搭載した無料ブラウザ。同一生成元ポリシーの厳守でユーザーの安全を守る。学校制限を簡単に回避。サーバー、プロキシレスでプライバシーを保護">
+    <meta property="twitter:creator" content="@wallBrowser">
+
+    <!-- モバイル最適化 -->
+    <meta name="theme-color" content="#8a2be2">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>"wall Browser" - vr 2.1.0</title>
+    <style>
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #1a1a2e;
+            --accent: #8a2be2;
+            --accent2: #00d4ff;
+            --text: #f0f0f0;
+            --text-dim: #aaa;
+            --border: 1px solid #2a2a4a;
+            --glow: 0 0 15px rgba(138, 43, 226, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+body {
+    background-image: url('/backrooms-theend.webp');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    background-color: var(--primary);
+    
+  
+    color: var(--text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+        
+#startScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; 
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;            
+    background: transparent; 
+    z-index: 1000;
+    padding: 20px; 
+}
+        
+        .portal-logo {
+            text-align: center;
+            margin-bottom: 50px;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+.logo-text {
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+    
+  
+    margin-top: -50px; 
+    
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+        
+        .logo-tagline {
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+        
+        .logo-highlight {
+            color: var(--accent2);
+            font-weight: bold;
+        }
+        
+        .main-search {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 16px 25px;
+            font-size: 1.1rem;
+            background: var(--secondary);
+            border: var(--border);
+            border-radius: 30px;
+            color: var(--text);
+            outline: none;
+            margin-bottom: 20px;
+            box-shadow: var(--glow);
+        }
+        
+        .search-button {
+            width: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+        
+        .search-button:hover {
+            transform: scale(1.02);
+        }
+        
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .quick-link {
+            background: rgba(255, 255, 255, 0.05);
+            border: var(--border);
+            color: var(--text);
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .quick-link:hover {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        #browserScreen {
+            width: 100%;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1001;
+        }
+        
+        #browserScreen.active {
+            display: flex;
+        }
+        
+        .browser-header {
+            background: var(--secondary);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: var(--border);
+        }
+        
+        .browser-logo {
+            color: var(--accent2);
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .browser-search {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: var(--border);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        
+        .browser-search:focus {
+            border-color: var(--accent2);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: var(--border);
+            color: var(--text);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .browser-content {
+            flex: 1;
+            display: flex;
+        }
+        
+        .browser-frame {
+            flex: 1;
+            border: none;
+            background: white;
+        }
+        
+        .tab-bar {
+            background: var(--secondary);
+            padding: 8px 20px;
+            display: flex;
+            gap: 8px;
+            border-top: var(--border);
+        }
+        
+        .tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: var(--border);
+            color: var(--text);
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .tab.active {
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            color: white;
+            border-color: transparent;
+        }
+        
+        #terminalOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .terminal-window {
+            width: 80%;
+            max-width: 800px;
+            height: 70%;
+            background: #0a0a0a;
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+        }
+        
+        .terminal-header {
+            background: var(--secondary);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: var(--border);
+        }
+        
+        .terminal-title {
+            color: var(--accent2);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .terminal-close {
+            background: #ff4444;
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .terminal-body {
+            height: calc(100% - 40px);
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .terminal-output {
+            color: var(--text);
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-bottom: 10px;
+        }
+        
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .terminal-prompt {
+            color: var(--accent2);
+            margin-right: 10px;
+            user-select: none;
+        }
+        
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            width: calc(100% - 120px);
+            outline: none;
+            caret-color: var(--accent2);
+        }
+        
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 2.5rem;
+            }
+            
+            .quick-links {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .browser-header {
+                padding: 8px 15px;
+                gap: 10px;
+            }
+            
+            .browser-logo {
+                font-size: 1rem;
+            }
+            
+            .terminal-window {
+                width: 95%;
+                height: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="startScreen">
+        <div class="portal-logo">
+            <div class="logo-text">wall browser</div>
+            <a href = "/same.html">同一生成元ポリシーについて</a>
+            <a href = "/demo.html">2.3.1demo版公開中 こちらをクリック！(プロキシありと無しをターミナルで選択できます)</a>
+            
+
+        </div>
+
+        <div class="main-search">
+            <input type="text" class="search-box" id="mainSearch" 
+                   placeholder="Search or enter website URL..." 
+                   autocomplete="off" autofocus>
+            <button class="search-button" onclick="startBrowse()">Enter</button>
+        </div>
+
+        <div class="quick-links">
+            <div class="quick-link" onclick="quickAccess('https://www.youtube.com')">YouTube</div>
+            <div class="quick-link" onclick="quickAccess('https://www.reddit.com')">Reddit</div>
+            <div class="quick-link" onclick="quickAccess('https://www.twitch.tv')">Twitch</div>
+            <div class="quick-link" onclick="quickAccess('https://discord.com')">Discord</div>
+            <div class="quick-link" onclick="quickAccess('https://krunker.io')">Krunker</div>
+            <div class="quick-link" onclick="quickAccess('https://www.roblox.com')">Roblox</div>
+            <div class="quick-link" onclick="quickAccess('https://www.google.com/search?q=startpage&rlz=1CAKSWW_enJP1116JP1116&oq=startpage&gs_lcrp=EgZjaHJvbWUqBggAEEUYQTIGCAAQRRhBMgYIARBFGDsyBggCEEUYPDIGCAMQRRg8MgYIBBBFGDwyBggFEEUYQTIGCAYQRRhB0gEINDE0NGowajGoAgCwAgA&sourceid=chrome&ie=UTF-8&safe=active&ssui=on')">StartPage</div>
+            <div class="quick-link" onclick="quickAccess('https://github.com')">GitHub</div>
+        </div>
+
+        <div style="margin-top: 30px; color: var(--text-dim); font-size: 0.8rem; text-align: center;">
+            <a href = "/howwork.html">How it works</a>
+        </div>
+    </div>
+    
+    <div id="browserScreen">
+        <div class="browser-header">
+            <div class="browser-logo" onclick="goHome()">wall</div>
+            <input type="text" class="browser-search" id="browserSearch" 
+                   placeholder="Search or enter URL..." 
+                   onkeypress="if(event.key === 'Enter') navigateFromBrowser()">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="browserBack()" title="Back">←</button>
+                <button class="nav-btn" onclick="browserForward()" title="Forward">→</button>
+                <button class="nav-btn" onclick="browserRefresh()" title="Refresh">↻</button>
+                <button class="nav-btn" onclick="goHome()" title="Home">⌂</button>
+            </div>
+        </div>
+        
+        <div class="browser-content">
+            <iframe class="browser-frame" id="browserFrame" 
+                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                    allowfullscreen>
+            </iframe>
+        </div>
+        
+        <div class="tab-bar">
+            <div class="tab active" onclick="switchTab('main')">Main</div>
+            <div class="tab" onclick="switchTab('games')">Games</div>
+            <div class="tab" onclick="switchTab('social')">Social</div>
+            <div class="tab" onclick="switchTab('tools')">Tools</div>
+        </div>
+    </div>
+    
+    <div id="terminalOverlay">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-title">wall-terminal v2.1.0 (demo)</div>
+                <button class="terminal-close" onclick="closeTerminal()">×</button>
+            </div>
+            <div class="terminal-body" id="terminalBody">
+                <div class="terminal-output" id="terminalOutput">
+wall-browser terminal v2.0.0
+Type 'help' for available commands
+----------------------------------------
+                </div>
+                <div class="terminal-input-line">
+                    <span class="terminal-prompt">user@wall:~$</span>
+                    <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" autofocus>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'main';
+        let tabs = {
+            main: 'https://www.google.com',
+            games: 'https://krunker.io',
+            social: 'https://www.x.com',
+            tools: 'https://www.w3schools.com'
+        };
+        
+        const startScreen = document.getElementById('startScreen');
+        const browserScreen = document.getElementById('browserScreen');
+        const mainSearch = document.getElementById('mainSearch');
+        const browserSearch = document.getElementById('browserSearch');
+        const browserFrame = document.getElementById('browserFrame');
+        const terminalOverlay = document.getElementById('terminalOverlay');
+        const terminalInput = document.getElementById('terminalInput');
+        const terminalOutput = document.getElementById('terminalOutput');
+        const terminalBody = document.getElementById('terminalBody');
+        
+        const terminalCommands = {
+            'help': {
+                execute: () => {
+                    return `Available commands:
+help           - Show this help message
+clear          - Clear terminal screen
+date           - Show current date and time
+whoami         - Show current user
+pwd            - Print working directory
+echo [text]    - Echo back text
+sysinfo        - Show system information
+calc [expression] - Simple calculator
+
+browser        - Open browser interface
+start          - Return to start screen
+exit           - Close terminal`;
+                }
+            },
+            'clear': {
+                execute: () => {
+                    terminalOutput.innerHTML = '';
+                    return '';
+                }
+            },
+            'date': {
+                execute: () => {
+                    return new Date().toLocaleString('ja-JP');
+                }
+            },
+            'whoami': {
+                execute: () => {
+                    return 'wall-user';
+                }
+            },
+            'pwd': {
+                execute: () => {
+                    return '/home/wall-user/browser-terminal';
+                }
+            },
+            'ls': {
+                execute: () => {
+                    return `applications/  documents/  downloads/  browser/  terminal/  config/  media/`;
+                }
+            },
+            'echo': {
+                execute: (args) => {
+                    return args.join(' ');
+                }
+            },
+            'sysinfo': {
+                execute: () => {
+                    return `wallBrowser Terminal v2.1.0
+Platform: ${navigator.platform}
+User Agent: ${navigator.userAgent.substring(0, 50)}...
+Screen: ${window.screen.width}x${window.screen.height}
+Online: ${navigator.onLine ? 'Yes' : 'No'}
+Cookies: ${navigator.cookieEnabled ? 'Enabled' : 'Disabled'}`;
+                }
+            },
+            'calc': {
+                execute: (args) => {
+                    if (args.length === 0) {
+                        return 'Usage: calc [expression]\nExample: calc 2 + 2';
+                    }
+                    try {
+                        const expression = args.join(' ');
+                        const safeExpression = expression.replace(/[^0-9\+\-\*\/\(\)\.\s]/g, '');
+                        const result = eval(safeExpression);
+                        return `${expression} = ${result}`;
+                    } catch (error) {
+                        return `Calculation error: ${error.message}`;
+                    }
+                }
+            },
+            'browser': {
+                execute: () => {
+                    closeTerminal();
+                    openBrowser();
+                    return 'Opening browser interface...';
+                }
+            },
+            'start': {
+                execute: () => {
+                    closeTerminal();
+                    closeBrowser();
+                    return 'Returning to start screen...';
+                }
+            },
+            'exit': {
+                execute: () => {
+                    closeTerminal();
+                    return 'Terminal session ended.';
+                }
+            }
+        };
+        
+        function showTerminal() {
+            terminalOverlay.style.display = 'flex';
+            terminalInput.focus();
+            terminalInput.value = '';
+        }
+        
+        function closeTerminal() {
+            terminalOverlay.style.display = 'none';
+        }
+        
+        function addToTerminal(text) {
+            const newLine = document.createElement('div');
+            newLine.className = 'terminal-output';
+            newLine.textContent = text;
+            terminalOutput.appendChild(newLine);
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+        
+        function executeTerminalCommand(command) {
+            const parts = command.split(' ');
+            const cmdKey = parts[0].toLowerCase();
+            const args = parts.slice(1);
+            
+            let result = '';
+            
+            if (terminalCommands[cmdKey]) {
+                if (cmdKey === 'echo' || cmdKey === 'calc') {
+                    result = terminalCommands[cmdKey].execute(args);
+                } else {
+                    result = terminalCommands[cmdKey].execute();
+                }
+            } else {
+                result = `Command not found: ${cmdKey}. Type 'help' for available commands.`;
+            }
+            
+            if (result) {
+                addToTerminal(result);
+            }
+        }
+        
+        function init() {
+            mainSearch.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') startBrowse();
+            });
+            
+            browserSearch.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') navigateFromBrowser();
+            });
+            
+            browserFrame.addEventListener('load', () => {
+                try {
+                    const url = browserFrame.contentWindow.location.href;
+                    browserSearch.value = url;
+                } catch(e) {}
+            });
+            
+            terminalInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const command = terminalInput.value.trim();
+                    terminalInput.value = '';
+                    
+                    addToTerminal(`user@wall:~$ ${command}`);
+                    executeTerminalCommand(command);
+                    
+                    terminalBody.scrollTop = terminalBody.scrollHeight;
+                }
+            });
+        }
+        
+        function startBrowse() {
+            const input = mainSearch.value.trim();
+            let url;
+            
+            if (!input) {
+                url = 'https://www.google.com';
+            } else if (input.includes('.') && !input.includes(' ')) {
+                url = input.startsWith('http') ? input : 'https://' + input;
+            } else {
+                url = `https://www.google.com/search?q=${encodeURIComponent(input)}`; 
+            }
+            
+            loadUrl(url);
+            openBrowser();
+        }
+        
+        function quickAccess(url) {
+            mainSearch.value = url;
+            startBrowse();
+        }
+        
+        function loadUrl(url) {
+            browserFrame.src = url;
+            browserSearch.value = url;
+            tabs.main = url;
+        }
+        
+        function openBrowser() {
+            startScreen.style.display = 'none';
+            browserScreen.style.display = 'flex';
+        }
+        
+        function closeBrowser() {
+            browserScreen.style.display = 'none';
+            startScreen.style.display = 'flex';
+            mainSearch.focus();
+        }
+        
+        function navigateFromBrowser() {
+            const input = browserSearch.value.trim();
+            let url;
+            
+            if (input.includes('.') && !input.includes(' ')) {
+                url = input.startsWith('http') ? input : 'https://' + input;
+            } else {
+                url = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+            }
+            
+            loadUrl(url);
+            tabs[currentTab] = url;
+        }
+        
+        function browserBack() {
+            try {
+                browserFrame.contentWindow.history.back();
+            } catch(e) {}
+        }
+        
+        function browserForward() {
+            try {
+                browserFrame.contentWindow.history.forward();
+            } catch(e) {}
+        }
+        
+        function browserRefresh() {
+            browserFrame.contentWindow.location.reload();
+        }
+        
+        function goHome() {
+            loadUrl(tabs[currentTab]);
+        }
+        
+        function switchTab(tabName) {
+            currentTab = tabName;
+            
+            document.querySelectorAll('#browserScreen .tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadUrl(tabs[tabName]);
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                if (terminalOverlay.style.display !== 'flex') {
+                    showTerminal();
+                } else {
+                    closeTerminal();
+                }
+                return;
+            }
+            
+            if (e.ctrlKey && e.key === 'l') {
+                e.preventDefault();
+                if (browserScreen.style.display === 'flex') {
+                    browserSearch.focus();
+                    browserSearch.select();
+                } else {
+                    mainSearch.focus();
+                    mainSearch.select();
+                }
+                return;
+            }
+            
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                if (browserScreen.style.display === 'flex') {
+                    browserRefresh();
+                }
+                return;
+            }
+            
+            if (e.ctrlKey && e.key === 'h') {
+                e.preventDefault();
+                if (browserScreen.style.display === 'flex') {
+                    goHome();
+                }
+                return;
+            }
+            
+            if (e.key === 'Escape') {
+                if (terminalOverlay.style.display === 'flex') {
+                    closeTerminal();
+                } else if (browserScreen.style.display === 'flex') {
+                    closeBrowser();
+                }
+                return;
+            }
+        });
+        
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

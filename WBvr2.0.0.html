@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>"WallBreak" Secure Browser</title>
+    <style>
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #141414;
+            --accent: #8a2be2;
+            --accent2: #00d4ff;
+            --accent3: #00ff88;
+            --text: #f0f0f0;
+            --text-dim: #aaa;
+            --text-link: #66b3ff;
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --success: #2ed573;
+            --glow: 0 0 15px rgba(138, 43, 226, 0.5);
+            --glow2: 0 0 15px rgba(0, 212, 255, 0.3);
+            --gradient: linear-gradient(135deg, var(--accent), var(--accent2));
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --border: 1px solid #2a2a2a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--primary);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+        
+        /* スタート画面 */
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease-out;
+            padding: 20px;
+        }
+        
+        #startScreen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .search-engine-logo {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .logo-main {
+            font-size: 4rem;
+            font-weight: 400;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo-tagline {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+        
+        /* 検索ボックス */
+        .main-search {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-box-container {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            border: var(--border);
+            background: var(--secondary);
+            margin-bottom: 30px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            font-size: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            outline: none;
+        }
+        
+        .search-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--gradient);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        /* クイックリンク */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 30px;
+            max-width: 600px;
+        }
+        
+        .quick-link {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-link);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        
+        /* ブラウザ画面 */
+        #browserScreen {
+            width: 100%;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+        }
+        
+        #browserScreen.active {
+            display: flex;
+        }
+        
+        .browser-header {
+            background: var(--secondary);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: var(--border);
+        }
+        
+        .browser-logo {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1rem;
+            min-width: 100px;
+        }
+        
+        .browser-search {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: var(--border);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: var(--border);
+            color: var(--text);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .browser-content {
+            flex: 1;
+            position: relative;
+        }
+        
+        .browser-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+        
+        /* タブとボタン */
+        .tab-bar {
+            background: var(--secondary);
+            padding: 8px 15px;
+            display: flex;
+            gap: 8px;
+            border-top: var(--border);
+        }
+        
+        .tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: var(--border);
+            color: var(--text);
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .tab.active {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .control-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .control-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            min-width: 120px;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .logo-main {
+                font-size: 2.5rem;
+            }
+            
+            .quick-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .control-buttons {
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .control-btn {
+                min-width: 100px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* ステータス表示 */
+        #statusMessage {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="statusMessage"></div>
+    
+    <!-- スタート画面 -->
+    <div id="startScreen">
+        <div class="search-engine-logo">
+            <div class="logo-main">wall Browser</div>
+            <div class="logo-tagline">UNBLOCK BROWSER</div>
+            <div class="logo-tagline">Project - Version 2.0.0</div>
+            <div class="logo-tagline">Game-incompatible version released!!</div>
+        </div>
+        
+        <div class="main-search">
+            <div class="search-box-container">
+                <input type="text" class="search-box" id="mainSearch" 
+                       placeholder="Enter website URL or search term..." 
+                       autocomplete="off" autofocus>
+                <button class="search-button" onclick="startBrowse()">GO</button>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <div class="quick-link" onclick="quickAccess('https://www.startpage.com')">Startpage</div>
+            <div class="quick-link" onclick="quickAccess('https://www.youtube.com')">YouTube</div>
+            <div class="quick-link" onclick="quickAccess('https://www.wikipedia.org')">Wikipedia</div>
+            <div class="quick-link" onclick="quickAccess('https://www.github.com')">GitHub</div>
+            <div class="quick-link" onclick="quickAccess('https://www.reddit.com')">Reddit</div>
+            <div class="quick-link" onclick="quickAccess('https://www.twitch.tv')">Twitch</div>
+            <div class="quick-link" onclick="quickAccess('https://krunker.io')">Krunker</div>
+            <div class="quick-link" onclick="quickAccess('https://classroom.google.com')">Classroom</div>
+        </div>
+        
+        <div style="margin-top: 30px; color: var(--text-dim); font-size: 0.8rem;">
+            Type URL and press GO or click quick links above
+        </div>
+    </div>
+    
+    <!-- ブラウザ画面 -->
+    <div id="browserScreen">
+        <div class="browser-header">
+            <div class="browser-logo" onclick="goHome()">wall</div>
+            <input type="text" class="browser-search" id="browserSearch" 
+                   placeholder="Enter URL or search..." 
+                   onkeypress="if(event.key === 'Enter') navigateFromBrowser()">
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="browserBack()" title="Back">←</button>
+                <button class="nav-btn" onclick="browserForward()" title="Forward">→</button>
+                <button class="nav-btn" onclick="browserRefresh()" title="Refresh">↻</button>
+                <button class="nav-btn" onclick="goHome()" title="Home">⌂</button>
+            </div>
+        </div>
+        
+        <div class="browser-content">
+            <iframe class="browser-frame" id="browserFrame" 
+                    sandbox="allow-scripts allow-forms allow-same-origin allow-popups"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+        
+        <div class="tab-bar">
+            <div class="tab active" onclick="switchTab('main')">Main</div>
+            <div class="tab" onclick="switchTab('search')">Search</div>
+            <div class="tab" onclick="switchTab('games')">Games</div>
+            <div class="tab" onclick="switchTab('tools')">Tools</div>
+        </div>
+        
+        <div class="control-buttons">
+            <button class="control-btn" onclick="toggleStartScreen()">Home</button>
+            <button class="control-btn" onclick="showHelp()">Help</button>
+        </div>
+    </div>
+
+    <script>
+        // 状態管理
+        let currentTab = 'main';
+        let tabs = {
+            main: 'https://www.google.com',
+            search: 'https://www.google.com',
+            games: 'https://www.crazygames.com',
+            tools: 'https://www.w3schools.com'
+        };
+        
+        // 要素
+        const startScreen = document.getElementById('startScreen');
+        const browserScreen = document.getElementById('browserScreen');
+        const mainSearch = document.getElementById('mainSearch');
+        const browserSearch = document.getElementById('browserSearch');
+        const browserFrame = document.getElementById('browserFrame');
+        const statusMessage = document.getElementById('statusMessage');
+        
+        // 初期化
+        function init() {
+            // Enterキーで検索
+            mainSearch.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') startBrowse();
+            });
+            
+            // iframe読み込みイベント
+            browserFrame.addEventListener('load', function() {
+                updateURLBar();
+                showStatus('Page loaded successfully', 'success');
+            });
+            
+            browserFrame.addEventListener('error', function() {
+                showStatus('Error loading page', 'error');
+            });
+            
+            showStatus('Ready to browse', 'info');
+        }
+        
+        // スタート画面からブラウザへ
+        function startBrowse() {
+            let input = mainSearch.value.trim();
+            
+            if (!input) {
+                input = 'https://www.google.com';
+            }
+            
+            let url = formatURL(input);
+            
+            // スタート画面を隠す
+            startScreen.classList.add('hidden');
+            
+            // ブラウザ画面を表示
+            setTimeout(() => {
+                browserScreen.classList.add('active');
+                loadURL(url);
+                tabs.main = url;
+                showStatus('Browser started', 'success');
+            }, 300);
+        }
+        
+        // URLフォーマット
+        function formatURL(input) {
+            // すでにURLならそのまま
+            if (input.startsWith('http://') || input.startsWith('https://')) {
+                return input;
+            }
+            
+            // ドメインっぽい場合
+            if (input.includes('.') && !input.includes(' ')) {
+                // 学校ブロック回避のためにwwwを追加
+                if (!input.startsWith('www.')) {
+                    input = 'www.' + input;
+                }
+                return 'https://' + input;
+            }
+            
+            // 検索クエリの場合
+            return `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+        }
+        
+        // URLを読み込む
+        function loadURL(url) {
+            try {
+                browserFrame.src = url;
+                browserSearch.value = url;
+                showStatus(`Loading: ${getDomain(url)}`, 'info');
+            } catch (error) {
+                showStatus('Error loading URL', 'error');
+                console.error('Load error:', error);
+            }
+        }
+        
+        // クイックアクセス
+        function quickAccess(url) {
+            mainSearch.value = url;
+            startBrowse();
+        }
+        
+        // ブラウザコントロール
+        function browserBack() {
+            try {
+                if (browserFrame.contentWindow.history.length > 1) {
+                    browserFrame.contentWindow.history.back();
+                }
+            } catch (e) {
+                showStatus('Cannot go back', 'warning');
+            }
+        }
+        
+        function browserForward() {
+            try {
+                browserFrame.contentWindow.history.forward();
+            } catch (e) {
+                showStatus('Cannot go forward', 'warning');
+            }
+        }
+        
+        function browserRefresh() {
+            try {
+                browserFrame.contentWindow.location.reload();
+            } catch (e) {
+                loadURL(browserSearch.value);
+            }
+        }
+        
+        function goHome() {
+            loadURL(tabs[currentTab]);
+        }
+        
+        // ブラウザからナビゲート
+        function navigateFromBrowser() {
+            const input = browserSearch.value.trim();
+            if (input) {
+                const url = formatURL(input);
+                loadURL(url);
+                tabs[currentTab] = url;
+            }
+        }
+        
+        // タブ切り替え
+        function switchTab(tabName) {
+            currentTab = tabName;
+            
+            // タブUI更新
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // タブコンテンツ読み込み
+            loadURL(tabs[tabName]);
+        }
+        
+        // ステータスメッセージ表示
+        function showStatus(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.style.display = 'block';
+            
+            // タイプに応じた色
+            const colors = {
+                info: 'var(--accent2)',
+                success: 'var(--success)',
+                warning: 'var(--warning)',
+                error: 'var(--danger)'
+            };
+            
+            statusMessage.style.borderColor = colors[type] || colors.info;
+            
+            // 3秒後に非表示
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 3000);
+        }
+        
+        // URLバー更新
+        function updateURLBar() {
+            try {
+                const url = browserFrame.contentWindow.location.href;
+                browserSearch.value = url;
+            } catch (e) {
+                // クロスオリジン制限
+            }
+        }
+        
+        // ドメイン抽出
+        function getDomain(url) {
+            try {
+                return new URL(url).hostname;
+            } catch {
+                return url.substring(0, 30) + '...';
+            }
+        }
+        
+        // スタート画面に戻る
+        function toggleStartScreen() {
+            browserScreen.classList.remove('active');
+            startScreen.classList.remove('hidden');
+            mainSearch.focus();
+        }
+        
+        // ヘルプ表示
+        function showHelp() {
+            showStatus('wall Browser Help: Enter URL or use quick links', 'info');
+            alert(`wall Browser - Quick Guide:
+            
+1. Enter any website URL in the search box
+2. Use quick links for popular sites
+3. Use arrow buttons to navigate
+4. Refresh button to reload page
+5. Home button to return to start
+6. If you cant open page, you need to try this"https://https://yourURL.com"then,enter "https://yourURL.com" OR use startpage
+            
+Note: Some sites may be blocked by school network.^⁠_⁠^`);
+        }
+        
+        // ページ読み込み時に初期化
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

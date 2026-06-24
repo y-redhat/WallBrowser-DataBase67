@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub How To Use</title>
+
+<style>
+    *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+        font-family:Arial,sans-serif;
+    }
+
+    body{
+        background:#f5f7fb;
+        color:#333;
+    }
+
+    header{
+        background:#24292e;
+        color:white;
+        padding:25px;
+        text-align:center;
+    }
+
+    .language-box{
+        text-align:center;
+        margin:20px;
+    }
+
+    button{
+        padding:10px 20px;
+        margin:5px;
+        border:none;
+        border-radius:8px;
+        cursor:pointer;
+        background:#2ea44f;
+        color:white;
+        font-size:16px;
+    }
+
+    button:hover{
+        opacity:0.85;
+    }
+
+    .container{
+        max-width:1000px;
+        margin:auto;
+        padding:20px;
+    }
+
+    .card{
+        background:white;
+        border-radius:15px;
+        padding:25px;
+        margin-bottom:30px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .card img{
+        width:100%;
+        border-radius:10px;
+        margin-top:15px;
+        border:1px solid #ddd;
+    }
+
+    h2{
+        color:#0366d6;
+        margin-bottom:10px;
+    }
+
+    p{
+        line-height:1.8;
+        margin-top:10px;
+    }
+
+    footer{
+        text-align:center;
+        padding:20px;
+        color:#666;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1 id="title">GitHubの使い方</h1>
+</header>
+
+<div class="language-box">
+    <button onclick="setLanguage('ja')">日本語</button>
+    <button onclick="setLanguage('en')">English</button>
+</div>
+
+<div class="container">
+
+    <div class="card">
+        <h2 id="step1-title"><a href="https://github.com/y-redhat/sdp-vr2.0.0/blob/main/theend.html">0. ここにアクセス　</a></h2>
+        <h2 id="step1-title">1. ファイルを選択する</h2>
+        <p id="step1-text">
+            GitHubのリポジトリを開き、使用したいファイルをクリックします。
+            赤丸で囲まれている「WallBrowserVr3.0.0.html」を選択してください。
+        </p>
+        <img src="step1.png" alt="Step1">
+    </div>
+
+    <div class="card">
+        <h2 id="step2-title">2. ファイルをダウンロードする</h2>
+        <p id="step2-text">
+            ファイルを開いた後、右上のダウンロードボタンをクリックします。
+            赤丸で示されているボタンからダウンロードできます。
+        </p>
+        <img src="step2.png" alt="Step2">
+    </div>
+
+    <div class="card">
+        <h2 id="step3-title">3. ダウンロードしたファイルを開く</h2>
+        <p id="step3-text">
+            ダウンロードしたHTMLファイルをダブルクリックするとブラウザで開くことができます。
+        </p>
+        <img src="step3.png" alt="Step3">
+    </div>
+
+</div>
+
+<footer>
+    GitHub Tutorial Website
+</footer>
+
+<script>
+const translations = {
+    ja: {
+        title: "GitHubの使い方",
+
+        step1Title: "1. ファイルを選択する",
+        step1Text:
+        "GitHubのリポジトリを開き、使用したいファイルをクリックします。赤丸で囲まれている「WallBrowserVr3.0.0.html」を選択してください。",
+
+        step2Title: "2. ファイルをダウンロードする",
+        step2Text:
+        "ファイルを開いた後、右上のダウンロードボタンをクリックします。赤丸で示されているボタンからダウンロードできます。",
+
+        step3Title: "3. ダウンロードしたファイルを開く",
+        step3Text:
+        "ダウンロードしたHTMLファイルをダブルクリックするとブラウザで開くことができます。"
+    },
+
+    en: {
+        title: "How to Use GitHub",
+
+        step1Title: "1. Select the File",
+        step1Text:
+        "Open the GitHub repository and click the file you want to use. Select 'WallBrowserVr3.0.0.html' highlighted by the red circle.",
+
+        step2Title: "2. Download the File",
+        step2Text:
+        "After opening the file, click the download button at the top right. The button highlighted by the red circle allows you to download the file.",
+
+        step3Title: "3. Open the Downloaded File",
+        step3Text:
+        "Double-click the downloaded HTML file to open it in your web browser."
+    }
+};
+
+function setLanguage(lang){
+    document.documentElement.lang = lang;
+
+    document.getElementById("title").textContent =
+        translations[lang].title;
+
+    document.getElementById("step1-title").textContent =
+        translations[lang].step1Title;
+
+    document.getElementById("step1-text").textContent =
+        translations[lang].step1Text;
+
+    document.getElementById("step2-title").textContent =
+        translations[lang].step2Title;
+
+    document.getElementById("step2-text").textContent =
+        translations[lang].step2Text;
+
+    document.getElementById("step3-title").textContent =
+        translations[lang].step3Title;
+
+    document.getElementById("step3-text").textContent =
+        translations[lang].step3Text;
+}
+</script>
+
+</body>
+</html>
