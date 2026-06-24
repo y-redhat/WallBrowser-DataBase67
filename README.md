@@ -36,4 +36,6 @@ WallBrowserVr3.0.0.html : バージョン3.0.0のwallBrowser(wallbreak)
 
 hteend.html : 作者の気まぐれで爆誕　過去の回避効率はいいものの最近は低迷している(派生)
 
+old2.3.0.html :　過去の公開で使用されたモデル。現在は脆弱性がのこっているかもなので使用は推奨しない
+
 wallBrowser(infinityfree).html : infinityfreeのドメインで配信していたダウンロード版のwallBrowser プロキシ実装済みの現時点の最高傑作
