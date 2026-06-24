@@ -34,7 +34,7 @@ WBvr2.0.0.html : バージョン2.0.0のwallBrowser(初期型)
 
 WallBrowserVr3.0.0.html : バージョン3.0.0のwallBrowser(wallbreak)
 
-hteend.html : 作者の気まぐれで爆誕　過去の回避効率はいいものの最近は低迷している(派生)
+hteend.html : 初期型から背景を追加するアップデートで生まれたモデル。背景は別途ダウンロード必要(派生)
 
 old2.3.0.html :　初期型の公開で最初の方に使用されたモデル。使用は推奨しない
 
