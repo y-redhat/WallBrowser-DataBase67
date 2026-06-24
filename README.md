@@ -1,5 +1,7 @@
 ###現時点のダウンロード推奨###
-wallBrowser(infinityfree).html 
+慣れた人はこちらwallBrowser(infinityfree).html 
+初めての方はこちら
+WallBrowser3.0.0
 
 *****活動記録*****
 1,Vr2.0.0リニューアル 2025年
