@@ -1,5 +1,6 @@
 ###現時点のダウンロード推奨###
 慣れた人はこちらwallBrowser(infinityfree).html 
+
 初めての方はこちら
 WallBrowser3.0.0
 
