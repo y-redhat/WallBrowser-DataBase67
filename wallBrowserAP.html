@@ -412,6 +412,17 @@
                 <button class="nav-btn" onclick="goHome()">⌂</button>
                 <button class="nav-btn" onclick="openProxyPanel()">P</button>
             </div>
+
+            
+        <div class="browser-content">
+            <!-- ★★★ 修正ポイント：allow-pointer-lock と pointer-lock を追加 ★★★ -->
+            <iframe class="browser-frame" id="browserFrame" 
+                    sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-pointer-lock"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; pointer-lock">
+            </iframe>
+        </div>
+
+            
         </div>
         <div class="browser-content">
             <iframe class="browser-frame" id="browserFrame" 
